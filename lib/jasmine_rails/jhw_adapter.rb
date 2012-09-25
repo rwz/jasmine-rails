@@ -27,9 +27,14 @@ module JasmineRails
     end
   end
 
+  class AdapterList < Jasmine::Headless::FilesList
+    def files
+      required_files.collect { |asset| asset.pathname.to_s }.uniq
+    end
+  end
 
-  class JsFilesList < Jasmine::Headless::FilesList
 
+  class JsFilesList < AdapterList
     def self.default_files
       %w{jasmine.js jasmine-html}
     end
@@ -38,11 +43,9 @@ module JasmineRails
       extensions = (%w{.js} + Sprockets.engine_extensions)
       %r{(#{extensions.join('|')})$}
     end
-
   end
 
-  class CssFilesList < Jasmine::Headless::FilesList
-
+  class CssFilesList < AdapterList
     def self.default_files
       %w{jasmine.css}
     end
